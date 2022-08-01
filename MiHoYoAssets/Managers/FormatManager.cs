@@ -36,7 +36,9 @@
         {
             if (File.Exists(input))
             {
-                return new (string, string)[] { (input, output) };
+                var extension = isEncrypt ? Extension.Item2 : Extension.Item1;
+                var fileName = $"{Path.GetFileNameWithoutExtension(input)}{extension}";
+                return new (string, string)[] { (input, Path.Combine(output, fileName)) };
             }
             var files = Directory.GetFiles(input, isEncrypt ? Pattern.Item2 : Pattern.Item1, SearchOption.AllDirectories);
             var paths = new List<(string, string)>();

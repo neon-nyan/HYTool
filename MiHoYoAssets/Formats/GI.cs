@@ -22,7 +22,9 @@
         {
             if (File.Exists(input))
             {
-                return new (string, string)[] { (input, output) };
+                var extension = isEncrypt ? Extension.Item2 : Extension.Item1;
+                var fileName = $"{Path.GetFileNameWithoutExtension(input)}{extension}";
+                return new (string, string)[] { (input, Path.Combine(output, fileName)) };
             }
             var files = isEncrypt ? CollectDirectories(input) : Directory.GetFiles(input, Pattern.Item1, SearchOption.AllDirectories);
             var paths = new List<(string, string)>();
@@ -93,7 +95,7 @@
                 var mhy0 = new Mhy0(entries);
                 mhy0.Write(mhy0Stream);
             }
-            var mhy0Buffer = mhy0Stream.GetBuffer();
+            var mhy0Buffer = mhy0Stream.ToArray();
             var reader = new EndianReader(mhy0Buffer);
             var blk = new Blk(reader.Length, ExpansionKey, ConstKey, Const, SBox);
             var buffer = new byte[reader.Length + HeaderSize];
