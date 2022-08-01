@@ -40,13 +40,5 @@
             blk.Encrypt((ulong)Random.Shared.NextInt64(), writer, reader);
             WriteOutput(output, buffer);
         }
-
-        public class Header
-        {
-            public string Signature;
-            public uint Version;
-            public string UnityVersion;
-            public string UnityRevision;
-        }
     }
 }
