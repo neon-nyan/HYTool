@@ -7,7 +7,7 @@
         private Node[] DirectoryInfo;
         private StreamFile[] FileList;
         private MemoryStream BlocksStream;
-        private bool HasPadding;
+        private bool HasDataHash;
 
         private readonly byte[] ExtensionKey;
         private readonly byte[] Key;
@@ -16,10 +16,10 @@
 
         private int MaxCompressedSize => BlocksInfo.Max(x => x.CompressedSize);
         private int MaxUncompressedSize => BlocksInfo.Max(x => x.UncompressedSize);
-        public Bundle(Header header, bool hasPadding, byte[] expansionKey = null, byte[] key = null, byte[] constKey = null, byte[] sbox = null)
+        public Bundle(Header header, bool hasDataHash, byte[] expansionKey = null, byte[] key = null, byte[] constKey = null, byte[] sbox = null)
         {
             m_Header = header;
-            HasPadding = hasPadding;
+            HasDataHash = hasDataHash;
             ExtensionKey = expansionKey;
             Key = key;
             ConstKey = constKey;
@@ -76,7 +76,7 @@
         private void ReadBlocksInfoAndDirectory(byte[] blocksInfo)
         {
             var reader = new EndianReader(blocksInfo, 0, EndianType.BigEndian);
-            if (HasPadding)
+            if (HasDataHash)
             {
                 reader.Position += 0x10;
             }
